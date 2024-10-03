@@ -1,6 +1,8 @@
 from rest_framework.views import APIView, status, Request, Response
-from users.models import User
 from users.serializers import UserSerializer
+
+from .serializers import CustomJWTSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class UserView(APIView):
@@ -11,3 +13,7 @@ class UserView(APIView):
         serializer.save()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
+
+
+class LoginJWTView(TokenObtainPairView):
+    serializer_class = CustomJWTSerializer
