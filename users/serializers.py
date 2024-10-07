@@ -35,6 +35,25 @@ class UserSerializer(serializers.Serializer):
 
         return User.objects.create_user(**validated_data)
 
+    def update(self, instance: User, validated_data: dict):
+        password = validated_data["password"]
+
+        instance.username = validated_data.get("username", instance.username)
+        instance.email = validated_data.get("email", instance.email)
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.is_employee = validated_data.get("is_employee", instance.is_employee)
+        instance.is_superuser = validated_data.get(
+            "is_superuser", instance.is_superuser
+        )
+
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+
+        return instance
+
 
 class CustomJWTSerializer(TokenObtainPairSerializer):
     @classmethod
